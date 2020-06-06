@@ -75,6 +75,7 @@ function start() {
 
 }
 
+
 async function pointMove(arrayBase, pointID, halfCharCount, speed) {
   let xFin=arrayBase[2][pointID]*52;
   let yFin=arrayBase[3][pointID]*52;
