@@ -5,23 +5,26 @@ function start() {
   // число цифр в сортировке
   let charCount=10;
   //массив для сортировки
-  let arrayBefore=[6,5,1,10,4,2,9,8,3,7];
+  let arrayBefore=[6,5,0,9,3,1,8,7  ,2,6];
   // маасив для сбора данных по полученному массиву
   // itemNumber-порядковый номер; generatedArray-сам сгенерированный массив; sortPosition-позиция в отсортированном массиве;
   // levelPosition-позиция по вертикали (уровень размещения); leftChild, rightChild - дети в дереве; parent - родитель в дереве
   let arrayBase=[
-    ['itemNumber'],
-    ['generatedArray'],
-    ['sortPosition'],
-    ['levelPosition'],
-    ['leftChild'],
-    ['rightChild'],
-    ['parent']
+    ['itemNumber    - '],
+    ['generatedArray- '],
+    ['sortPosition  - '],
+    ['levelPosition - '],
+    ['leftChild     - '],
+    ['rightChild    - '],
+    ['parent        - ']
   ];
   // все до след комментария - процесс заполнения "arrayBase"
   for (let i = 1; i <= charCount; i++) {
     arrayBase[0][i]=i;
-    arrayBase[1][i]=arrayBefore[i];
+    arrayBase[1][i]=arrayBefore[i-1];
+    arrayBase[4][i]='';
+    arrayBase[5][i]='';
+    arrayBase[6][i]='';
   }
   let arrayPosition=bubbleSort(arrayBefore, 10);
   for (let j = 0; j < charCount; j++)
@@ -31,11 +34,43 @@ function start() {
         break;
     }
   }
+  arrayBase=familyDistribution(arrayBase, charCount);
+ // вывод в консоль сформированного массива
+  for (let j = 0; j < 7; j++)
+    console.log(j+' '+arrayBase[j]);
+
 
 }
 
+// заполняем строки детей и уровня в дереве. родителей не заполняю, пока без надобноси
+function familyDistribution(arrayBase, charCount) {
+  arrayBase[3][1]=1;
+  for (let i = 2; i<= charCount; i++) {
+    for (let j = 1; j <i; ) {
+      if (arrayBase[1][i]<arrayBase[1][j]){
+        if (arrayBase[4][j]=="") {
+          arrayBase[4][j]=i;
+          arrayBase[3][i]=arrayBase[3][j]+1;
+          arrayBase[6][i]=j;
+          break;
+        } else {
+          j=arrayBase[4][j];
+        }
+      } else{
+        if (arrayBase[5][j]=="") {
+          arrayBase[5][j]=i;
+          arrayBase[3][i]=arrayBase[3][j]+1;
+          arrayBase[6][i]=j;
+          break;
+        } else j=arrayBase[5][j];
+      }
+    }
+  }
+  return arrayBase;
+}
 
-// сортировка пузырьком, модернезирована под формат вывода изменения позиций чисел (на ее основе строится sortPosition)
+
+// сортировка пузырьком, модернезирована под вывод результатов изменения позиций чисел (на ее основе строится sortPosition)
 function bubbleSort(arr, charCount) {
   let arrayB=[];
   let arrayS=[];
