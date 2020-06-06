@@ -1,0 +1,41 @@
+@font-face {
+	font-family: SansSerif;
+	src: url(../fonts/Sans_Serif.ttf);
+
+}
+
+@font-face {
+	font-family: TimesNewRoman;
+	src: url(../fonts/Times_New_Roman.ttf);
+}
+
+@font-face {
+	font-family: PlumbMedium;
+	src: url(../fonts/Plumb.ttf);
+}
+
+body{
+	margin: 0;
+	font-family: PlumbMedium, Verdana, sans-serif, TimesNewRoman;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+}
+
+.sortingTree{
+	border: 1px solid black;
+	display: inline-grid;
+	grid-template-columns: repeat(4, 1fr);
+
+	justify-content: center;
+}
+
+.sortingBlock{
+	text-align: center;
+	top: 50%;
+	border-radius:50em;
+	border: 1px solid black;
+	height: 4em;
+	width: 4em;
+}
