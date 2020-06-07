@@ -62,9 +62,9 @@ function start() {
     }
     arrayBase=familyDistribution(arrayBase, charCount);
    // вывод в консоль сформированного массива
-    for (let j = 0; j < 7; j++){
+    /*for (let j = 0; j < 7; j++){
       console.log(j+' '+arrayBase[j]);
-    }
+    }*/
     // вычисление высоты дерева (самой большой уровень)
     for (let i = 1; i <= charCount; i++) {
       if (arrayBase[3][i]!='' && arrayBase[3][i]>levelCount)
