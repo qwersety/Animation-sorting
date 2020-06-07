@@ -7,8 +7,21 @@
     <script src="js/main.js" defer></script>
   </head>
   <body>
-    <div class='sortingTree' id='sortingTree'>
-
+    <div class='titleBlock'>
+      <div class='titleText'>
+        Данная программа наглядно сортирует автоматически сгенерированный набор случайных чисел используя метод сортировки "бинарное дерево". <br>
+        После ввода <b>числа элементов</b> сортировки и <b>скорости</b> построения дерева нажмите кнопку <b>начать</b>.<br>
+        Внимание! Вводите целые-положительные числа от 0 до 100 (больше не рекомендую!).
+      </div>
+      <form id="startForm" class="form" action="#" method="post">
+        <input id="numberNumbers" type="text"  required placeholder="Число элементов" maxlength="3" title="Не рекомендую больше 100!"  name="numNums" class="inputs">
+        <input id="speedMove" type="text"  required placeholder="Скорость" maxlength="3" title="Лучше что-то близкое к числу элементов!"  name="speedT" class="inputs">
+        <div id="startClick"  class="inputBatton">Начать</div>
+      </form>
+    </div>
+    <div class='mainField'>
+      <div class='sortingTree' id='sortingTree'></div>
+      <canvas class="pointCanvas" id="canvasField"></canvas>
     </div>
   </body>
 </html>

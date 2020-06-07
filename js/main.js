@@ -1,11 +1,20 @@
 "use strict";
 
-document.addEventListener("DOMContentLoaded", start);
+document.getElementById('startClick').addEventListener("click", start);
+
 function start() {
-  // число цифр в сортировке
-  let charCount=15;
+  console.log("стартанул");
+  let form = document.getElementById('startForm');
+  if (form.numNums.value%1!=0 || form.numNums.value<=0 || form.speedT.value%1!=0 || form.speedT.value<=0){
+    alert('Ошибка, вроверьте введенные данные!')
+  }
+  let charCount = Number(form.numNums.value);
+  let speed =  Number(form.speedT.value);
+
+  /*// число цифр в сортировке
+  let charCount=10;
   // скорость движения объектов
-  let speed=1;
+  let speed=5;*/
   // высота дерева, 1 по умолчанию
   let levelCount=1;
   //массив для сортировки
@@ -61,7 +70,7 @@ function start() {
   for (let i = 1; i <= charCount*levelCount+charCount; i++) {
     document.getElementById('sortingTree').innerHTML+=`<div id='cell-${i}' class='cell'></div>`;
   }
-  // вставка чисел на законные места
+  // вставка чисел на законные места. тестовый режис проверки работоспособнсти распреедления чисел по таблице
   /*for (let i = 1; i <= charCount; i++) {
     //console.log(`cell-${(arrayBase[3][i]-1)*charCount+arrayBase[2][i]+charCount}`);
     document.getElementById(`cell-${(arrayBase[3][i]-1)*charCount+arrayBase[2][i]+charCount}`).innerHTML=`<div id='pointTest-${i}' class='pointTest'><div class='inPoint'>${arrayBase[1][i]}</div></div>`;
@@ -73,28 +82,77 @@ function start() {
     document.getElementById(`cell-${halfCharCount}`).innerHTML+=`<div id='point-${i}' class='point'><div class='inPoint'>${arrayBase[1][i]}</div></div>`;
     document.getElementById(`point-${i}`).style.setProperty('z-index', `${charCount-i+5}`);
   }
-  // двигаем точки на свои места
-  for (let i = 1; i <= charCount; i++){
-    pointMove(arrayBase, i, halfCharCount, speed);
-  }
+  let flag=0;
+  // запускаем скрипт вижения точек
+  flag = pointMove(arrayBase, 1, charCount, halfCharCount, speed, flag);
+  /*setTimeout(finalAction, charCount*8000/speed);
+  function finalAction() {
+    for (let i = 1; i <= charCount; i++) {
+      finalMove(arrayBase,halfCharCount, i, charCount, speed)
+    }
+
+  }*/
+}
+function finalMove(arrayBase,halfCharCount, pointID,charCount, speed) {
+  let xFin=arrayBase[2][pointID]*52;
+  let yFin=arrayBase[3][pointID]*52;
+  let xDis=xFin-(halfCharCount)*52;
+  let yDis=0;
+  let point = document.getElementById(`point-${pointID}`);
+  let animation = point.animate([
+    {transform: `translate(${xDis}px, ${yFin}px)`},
+    {transform: `translate(${xDis}px, ${yDis}px)`}
+  ], 3000);
+  animation.addEventListener('finish', function() {
+    point.style.transform = `translate(${xDis}px, ${yDis}px)`;
+  });
 }
 
+
 //функция движения точек на свои места в дереве
-function pointMove(arrayBase, pointID, halfCharCount, speed) {
+function pointMove(arrayBase, pointID, charCount, halfCharCount, speed, flag) {
   let xFin=arrayBase[2][pointID]*52;
   let yFin=arrayBase[3][pointID]*52;
   let xDis=xFin-(halfCharCount)*52;
   let point = document.getElementById(`point-${pointID}`);
+  point.style.setProperty('z-index', `${charCount-arrayBase[2][pointID]+5}`);
   let animation = point.animate([
     {transform: 'translate(0)'},
     {transform: `translate(${xDis}px, ${yFin}px)`}
   ], 3000/speed);
   animation.addEventListener('finish', function() {
+    flag++;
+    console.log(flag);
     point.style.transform = `translate(${xDis}px, ${yFin}px)`;
-
+    if (pointID<charCount) {
+      pointID++;
+      pointMove(arrayBase, pointID, charCount, halfCharCount, speed, flag);
+      if (pointID>1){
+        lineDraw( arrayBase[2][arrayBase[6][pointID]]*52-26, (arrayBase[3][arrayBase[6][pointID]]+1)*52-26, (arrayBase[2][pointID]*52-26), (arrayBase[3][pointID]+1)*52-26);
+      }
+    }
+    if (flag==charCount) {
+      for (let i = 1; i <= charCount; i++) {
+        finalMove(arrayBase,halfCharCount, i, charCount, speed);
+        var canvas=document.getElementById('canvasField');
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
   });
+
+  return flag;
 }
 
+function lineDraw(xP, yP, xC, yC) {
+  var canvas=document.getElementById('canvasField');
+  var ctx = canvas.getContext('2d');
+  ctx.strokeStyle = "#008B8B";
+  ctx.moveTo(xP,yP);
+  ctx.lineWidth = 3; // толщина линии
+  ctx.lineTo(xC, yC);
+  ctx.stroke();
+}
 
 // заполняем строки детей, родителей и уровни в дереве
 function familyDistribution(arrayBase, charCount) {

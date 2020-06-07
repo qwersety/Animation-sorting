@@ -23,9 +23,66 @@ body{
 
 }
 
+.titleBlock{
+ display: inline-flex;
+}
+
+.titleText{
+	font-size: 1em;
+	text-align: center;
+	width: 600px;
+	color: #008B8B;
+}
+
+.form{
+ display: flex;
+ flex-direction: column;
+}
+.inputs{
+	width:150px;
+	height: 30px;
+	margin: 3px;
+	text-align:center;
+	border: 0px solid #4e1563;
+	box-shadow: 0 0 3px #008B8B;
+	border-radius:3em;
+
+	margin-top: 10px;
+	outline:none;
+	font-weight: 600;
+	color: #FFA9A1;
+}
+
+.inputBatton{
+	width:150px;
+	height: 30px;
+	padding: 10px 0 0 0;
+	margin: 10px auto;
+	text-align:center;
+	background: #008B8B;
+	border: 0px solid #4e1563;
+	box-shadow: 0 0 3px #008B8B;
+	border-radius:3em;
+	outline:none;
+	font-weight: 600;
+	color: #FFA9A1;
+}
+
+.inputBatton{
+	cursor: pointer;
+}
+
+.mainField{
+	display: grid;
+	grid-column: 1;
+	grid-row: 1;
+}
+
 .sortingTree{
+	grid-area: 1 / 1 / 2/2;
 	display: inline-grid;
 	justify-content: center;
+	grid-gap: 0;
 	padding: 15px;
 	font-size: 1em;
 }
@@ -52,7 +109,8 @@ body{
 
 .point{
 	background: radial-gradient(white, #FFA9A1);
-	box-shadow: 0 0 10px #FFA9A1;
+	box-shadow: 0 0 10px #008B8B;
+	color: #008B8B;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -68,4 +126,11 @@ body{
 	text-align: center;
 	width: auto;
 	height: auto;
+}
+
+.pointCanvas{
+	padding: 15px;
+	grid-area: 1 / 1 / 2/2;
+	display: block;
+ 	position: relative;
 }
