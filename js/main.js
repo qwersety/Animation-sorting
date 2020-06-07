@@ -13,6 +13,8 @@ function start() {
   if (form.numNums.value%1!=0 || form.numNums.value<=0 || form.speedT.value%1!=0 || form.speedT.value<=0){
     alert('Ошибка, вроверьте введенные данные!')
   } else {
+
+    document.getElementById("startClick").style.pointerEvents = "none";
     // если данные прошли проверку присваивам начальные данные и поехали
     // число цифр в сортировке
     let charCount = Number(form.numNums.value);
@@ -109,6 +111,7 @@ function finalMove(arrayBase,halfCharCount, pointID,charCount, speed) {
   ], 3000);
   animation.addEventListener('finish', function() {
     point.style.transform = `translate(${xDis}px, ${yDis}px)`;
+    document.getElementById("startClick").style.pointerEvents = "auto";
   });
 }
 
