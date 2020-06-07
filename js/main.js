@@ -98,6 +98,11 @@ function start() {
   }
 }
 
+// функция для внесения паузы в код (использую до подъема шаров)
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // функция подъема точек ввверх
 function finalMove(arrayBase,halfCharCount, pointID,charCount, speed) {
   let xFin=arrayBase[2][pointID]*52;
@@ -127,7 +132,7 @@ function pointMove(arrayBase, pointID, charCount, halfCharCount, speed, flag) {
     {transform: 'translate(0)'},
     {transform: `translate(${xDis}px, ${yFin}px)`}
   ], 3000/speed);
-  animation.addEventListener('finish', function() {
+  animation.addEventListener('finish', async function() {
     flag++; // планировал, но не использовал
     point.style.transform = `translate(${xDis}px, ${yFin}px)`;
     if (pointID<charCount) {
@@ -138,8 +143,9 @@ function pointMove(arrayBase, pointID, charCount, halfCharCount, speed, flag) {
         lineDraw( arrayBase[2][arrayBase[6][pointID]]*52-26, (arrayBase[3][arrayBase[6][pointID]]+1)*52-26, (arrayBase[2][pointID]*52-26), (arrayBase[3][pointID]+1)*52-26);
       }
     }
-    // проверяю флаг, если он равен числу элементов массива, стираю линии с канваса
+    // проверяю флаг, если он равен числу элементов массива, стираю линии с канваса и через 2 сек поднимаем шарики
     if (flag==charCount) {
+      await sleep(2000);
       for (let i = 1; i <= charCount; i++) {
         finalMove(arrayBase,halfCharCount, i, charCount, speed);
         canvasClear();
