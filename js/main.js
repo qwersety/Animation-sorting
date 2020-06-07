@@ -3,22 +3,24 @@
 document.getElementById('startClick').addEventListener("click", start);
 
 function start() {
+  // обнуляем поле и блок начального массива
   document.getElementById('sortingTree').innerHTML='';
   document.getElementById('arrayBlock').innerHTML='';
+  canvasClear();
+  // считываем данные инпутов
   let form = document.getElementById('startForm');
+  // проверрка на корректное число
   if (form.numNums.value%1!=0 || form.numNums.value<=0 || form.speedT.value%1!=0 || form.speedT.value<=0){
     alert('Ошибка, вроверьте введенные данные!')
   } else {
+    // если данные прошли проверку присваивам начальные данные и поехали
+    // число цифр в сортировке
     let charCount = Number(form.numNums.value);
-    let speed =  Number(form.speedT.value);
-
-    /*// число цифр в сортировке
-    let charCount=10;
     // скорость движения объектов
-    let speed=5;*/
+    let speed =  Number(form.speedT.value);
     // высота дерева, 1 по умолчанию
     let levelCount=1;
-    //массив для сортировки
+    //массив для сортировки, также выводим его на экран
     let arrayBefore=[];
     for (let i = 0; i < charCount; i++) {
       arrayBefore[i]=randomInteger(0,99);
@@ -91,15 +93,10 @@ function start() {
     let flag=0;
     // запускаем скрипт вижения точек
     flag = pointMove(arrayBase, 1, charCount, halfCharCount, speed, flag);
-    /*setTimeout(finalAction, charCount*8000/speed);
-    function finalAction() {
-      for (let i = 1; i <= charCount; i++) {
-        finalMove(arrayBase,halfCharCount, i, charCount, speed)
-      }
-
-    }*/
   }
 }
+
+// функция подъема точек ввверх
 function finalMove(arrayBase,halfCharCount, pointID,charCount, speed) {
   let xFin=arrayBase[2][pointID]*52;
   let yFin=arrayBase[3][pointID]*52;
@@ -128,28 +125,34 @@ function pointMove(arrayBase, pointID, charCount, halfCharCount, speed, flag) {
     {transform: `translate(${xDis}px, ${yFin}px)`}
   ], 3000/speed);
   animation.addEventListener('finish', function() {
-    flag++;
+    flag++; // планировал, но не использовал
     point.style.transform = `translate(${xDis}px, ${yFin}px)`;
     if (pointID<charCount) {
       pointID++;
-      pointMove(arrayBase, pointID, charCount, halfCharCount, speed, flag);
+      pointMove(arrayBase, pointID, charCount, halfCharCount, speed, flag); // перезапуск для другой точки
+      // если дошли до конца запускаем анимаацию общего подъема
       if (pointID>1){
         lineDraw( arrayBase[2][arrayBase[6][pointID]]*52-26, (arrayBase[3][arrayBase[6][pointID]]+1)*52-26, (arrayBase[2][pointID]*52-26), (arrayBase[3][pointID]+1)*52-26);
       }
     }
+    // проверяю флаг, если он равен числу элементов массива, стираю линии с канваса
     if (flag==charCount) {
       for (let i = 1; i <= charCount; i++) {
         finalMove(arrayBase,halfCharCount, i, charCount, speed);
-        var canvas=document.getElementById('canvasField');
-        var ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        canvasClear();
       }
     }
   });
 
   return flag;
 }
-
+// функция очистки канваса
+function canvasClear() {
+  var canvas=document.getElementById('canvasField');
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+// отрисовка линий на дереве от родителя к детям, если они есть
 function lineDraw(xP, yP, xC, yC) {
   var canvas=document.getElementById('canvasField');
   var ctx = canvas.getContext('2d');
