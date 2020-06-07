@@ -4,6 +4,7 @@ document.getElementById('startClick').addEventListener("click", start);
 
 function start() {
   document.getElementById('sortingTree').innerHTML='';
+  document.getElementById('arrayBlock').innerHTML='';
   let form = document.getElementById('startForm');
   if (form.numNums.value%1!=0 || form.numNums.value<=0 || form.speedT.value%1!=0 || form.speedT.value<=0){
     alert('Ошибка, вроверьте введенные данные!')
