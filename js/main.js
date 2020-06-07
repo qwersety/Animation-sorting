@@ -3,95 +3,101 @@
 document.getElementById('startClick').addEventListener("click", start);
 
 function start() {
-  console.log("стартанул");
+  document.getElementById('sortingTree').innerHTML='';
   let form = document.getElementById('startForm');
   if (form.numNums.value%1!=0 || form.numNums.value<=0 || form.speedT.value%1!=0 || form.speedT.value<=0){
     alert('Ошибка, вроверьте введенные данные!')
-  }
-  let charCount = Number(form.numNums.value);
-  let speed =  Number(form.speedT.value);
+  } else {
+    let charCount = Number(form.numNums.value);
+    let speed =  Number(form.speedT.value);
 
-  /*// число цифр в сортировке
-  let charCount=10;
-  // скорость движения объектов
-  let speed=5;*/
-  // высота дерева, 1 по умолчанию
-  let levelCount=1;
-  //массив для сортировки
-  let arrayBefore=[];
-  for (let i = 0; i < charCount; i++) {
-    arrayBefore[i]=randomInteger(0,99);
-  }
-  // маасив для сбора данных по полученному массиву
-  // itemNumber-порядковый номер; generatedArray-сам сгенерированный массив; sortPosition-позиция в отсортированном массиве;
-  // levelPosition-позиция по вертикали (уровень размещения); leftChild, rightChild - дети в дереве; parent - родитель в дереве
-  let arrayBase=[
-    ['itemNumber    - '],
-    ['generatedArray- '],
-    ['sortPosition  - '],
-    ['levelPosition - '],
-    ['leftChild     - '],
-    ['rightChild    - '],
-    ['parent        - ']
-  ];
-  // все до след комментария - процесс заполнения "arrayBase"
-  for (let i = 1; i <= charCount; i++) {
-    arrayBase[0][i]=i;
-    arrayBase[1][i]=arrayBefore[i-1];
-    arrayBase[4][i]='';
-    arrayBase[5][i]='';
-    arrayBase[6][i]='';
-  }
-  let arrayPosition=bubbleSort(arrayBefore, charCount);
-  for (let j = 0; j < charCount; j++)
+    /*// число цифр в сортировке
+    let charCount=10;
+    // скорость движения объектов
+    let speed=5;*/
+    // высота дерева, 1 по умолчанию
+    let levelCount=1;
+    //массив для сортировки
+    let arrayBefore=[];
     for (let i = 0; i < charCount; i++) {
-      if (arrayPosition[i]+1==arrayBase[0][j+1]){
-        arrayBase[2][j+1]=i+1;
-        break;
+      arrayBefore[i]=randomInteger(0,99);
+      if (i!=charCount-1){
+        document.getElementById('arrayBlock').innerHTML+=`${arrayBefore[i]}, `;
+      } else {
+        document.getElementById('arrayBlock').innerHTML+=`${arrayBefore[i]}`;
+      }
     }
-  }
-  arrayBase=familyDistribution(arrayBase, charCount);
- // вывод в консоль сформированного массива
-  for (let j = 0; j < 7; j++){
-    console.log(j+' '+arrayBase[j]);
-  }
-  // вычисление высоты дерева (самой большой уровень)
-  for (let i = 1; i <= charCount; i++) {
-    if (arrayBase[3][i]!='' && arrayBase[3][i]>levelCount)
-      levelCount=arrayBase[3][i]
-  }
-  // формируем строки и столбцы грида
-  document.getElementById('sortingTree').style.setProperty('grid-template-columns', `repeat(${charCount}, 1fr)`);
-  document.getElementById('sortingTree').style.setProperty('grid-template-rows', `repeat(${levelCount}, 1fr)`);
-  // подстраиваем канвас под поле
-  document.getElementById(`canvasField`).width=charCount*52;
-  document.getElementById(`canvasField`).height=(levelCount+1)*52;
-  // заполняем все ячейки пустыми блоками (на 1 уровень больше, чем дерево)
-  for (let i = 1; i <= charCount*levelCount+charCount; i++) {
-    document.getElementById('sortingTree').innerHTML+=`<div id='cell-${i}' class='cell'></div>`;
-  }
-  // вставка чисел на законные места. тестовый режис проверки работоспособнсти распреедления чисел по таблице
-  /*for (let i = 1; i <= charCount; i++) {
-    //console.log(`cell-${(arrayBase[3][i]-1)*charCount+arrayBase[2][i]+charCount}`);
-    document.getElementById(`cell-${(arrayBase[3][i]-1)*charCount+arrayBase[2][i]+charCount}`).innerHTML=`<div id='pointTest-${i}' class='pointTest'><div class='inPoint'>${arrayBase[1][i]}</div></div>`;
-  }*/
-  // вычисляем центральную позицию (в большую сторону)
-  let halfCharCount=Math.round(charCount/2);
-  // вставляем все точки в центральную начальную позицию, задаем им разные z индексы
-  for (let i = 1; i <= charCount; i++) {
-    document.getElementById(`cell-${halfCharCount}`).innerHTML+=`<div id='point-${i}' class='point'><div class='inPoint'>${arrayBase[1][i]}</div></div>`;
-    document.getElementById(`point-${i}`).style.setProperty('z-index', `${charCount-i+5}`);
-  }
-  let flag=0;
-  // запускаем скрипт вижения точек
-  flag = pointMove(arrayBase, 1, charCount, halfCharCount, speed, flag);
-  /*setTimeout(finalAction, charCount*8000/speed);
-  function finalAction() {
+    // маасив для сбора данных по полученному массиву
+    // itemNumber-порядковый номер; generatedArray-сам сгенерированный массив; sortPosition-позиция в отсортированном массиве;
+    // levelPosition-позиция по вертикали (уровень размещения); leftChild, rightChild - дети в дереве; parent - родитель в дереве
+    let arrayBase=[
+      ['itemNumber    - '],
+      ['generatedArray- '],
+      ['sortPosition  - '],
+      ['levelPosition - '],
+      ['leftChild     - '],
+      ['rightChild    - '],
+      ['parent        - ']
+    ];
+    // все до след комментария - процесс заполнения "arrayBase"
     for (let i = 1; i <= charCount; i++) {
-      finalMove(arrayBase,halfCharCount, i, charCount, speed)
+      arrayBase[0][i]=i;
+      arrayBase[1][i]=arrayBefore[i-1];
+      arrayBase[4][i]='';
+      arrayBase[5][i]='';
+      arrayBase[6][i]='';
     }
+    let arrayPosition=bubbleSort(arrayBefore, charCount);
+    for (let j = 0; j < charCount; j++)
+      for (let i = 0; i < charCount; i++) {
+        if (arrayPosition[i]+1==arrayBase[0][j+1]){
+          arrayBase[2][j+1]=i+1;
+          break;
+      }
+    }
+    arrayBase=familyDistribution(arrayBase, charCount);
+   // вывод в консоль сформированного массива
+    for (let j = 0; j < 7; j++){
+      console.log(j+' '+arrayBase[j]);
+    }
+    // вычисление высоты дерева (самой большой уровень)
+    for (let i = 1; i <= charCount; i++) {
+      if (arrayBase[3][i]!='' && arrayBase[3][i]>levelCount)
+        levelCount=arrayBase[3][i]
+    }
+    // формируем строки и столбцы грида
+    document.getElementById('sortingTree').style.setProperty('grid-template-columns', `repeat(${charCount}, 1fr)`);
+    document.getElementById('sortingTree').style.setProperty('grid-template-rows', `repeat(${levelCount}, 1fr)`);
+    // подстраиваем канвас под поле
+    document.getElementById(`canvasField`).width=charCount*52;
+    document.getElementById(`canvasField`).height=(levelCount+1)*52;
+    // заполняем все ячейки пустыми блоками (на 1 уровень больше, чем дерево)
+    for (let i = 1; i <= charCount*levelCount+charCount; i++) {
+      document.getElementById('sortingTree').innerHTML+=`<div id='cell-${i}' class='cell'></div>`;
+    }
+    // вставка чисел на законные места. тестовый режис проверки работоспособнсти распреедления чисел по таблице
+    /*for (let i = 1; i <= charCount; i++) {
+      //console.log(`cell-${(arrayBase[3][i]-1)*charCount+arrayBase[2][i]+charCount}`);
+      document.getElementById(`cell-${(arrayBase[3][i]-1)*charCount+arrayBase[2][i]+charCount}`).innerHTML=`<div id='pointTest-${i}' class='pointTest'><div class='inPoint'>${arrayBase[1][i]}</div></div>`;
+    }*/
+    // вычисляем центральную позицию (в большую сторону)
+    let halfCharCount=Math.round(charCount/2);
+    // вставляем все точки в центральную начальную позицию, задаем им разные z индексы
+    for (let i = 1; i <= charCount; i++) {
+      document.getElementById(`cell-${halfCharCount}`).innerHTML+=`<div id='point-${i}' class='point'><div class='inPoint'>${arrayBase[1][i]}</div></div>`;
+      document.getElementById(`point-${i}`).style.setProperty('z-index', `${charCount-i+5}`);
+    }
+    let flag=0;
+    // запускаем скрипт вижения точек
+    flag = pointMove(arrayBase, 1, charCount, halfCharCount, speed, flag);
+    /*setTimeout(finalAction, charCount*8000/speed);
+    function finalAction() {
+      for (let i = 1; i <= charCount; i++) {
+        finalMove(arrayBase,halfCharCount, i, charCount, speed)
+      }
 
-  }*/
+    }*/
+  }
 }
 function finalMove(arrayBase,halfCharCount, pointID,charCount, speed) {
   let xFin=arrayBase[2][pointID]*52;
@@ -122,7 +128,6 @@ function pointMove(arrayBase, pointID, charCount, halfCharCount, speed, flag) {
   ], 3000/speed);
   animation.addEventListener('finish', function() {
     flag++;
-    console.log(flag);
     point.style.transform = `translate(${xDis}px, ${yFin}px)`;
     if (pointID<charCount) {
       pointID++;
