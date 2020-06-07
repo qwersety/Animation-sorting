@@ -113,7 +113,7 @@ function finalMove(arrayBase,halfCharCount, pointID,charCount, speed) {
   let animation = point.animate([
     {transform: `translate(${xDis}px, ${yFin}px)`},
     {transform: `translate(${xDis}px, ${yDis}px)`}
-  ], 3000);
+  ], 3000); // !!!!! время подъема шаров, не уменьшается от показателя скорости
   animation.addEventListener('finish', function() {
     point.style.transform = `translate(${xDis}px, ${yDis}px)`;
     document.getElementById("startClick").style.pointerEvents = "auto";
@@ -145,7 +145,7 @@ function pointMove(arrayBase, pointID, charCount, halfCharCount, speed, flag) {
     }
     // проверяю флаг, если он равен числу элементов массива, стираю линии с канваса и через 2 сек поднимаем шарики
     if (flag==charCount) {
-      await sleep(2000);
+      await sleep(2000); // время паузы до разрушения дерева !!! не уменьшается от показателя скорости
       for (let i = 1; i <= charCount; i++) {
         finalMove(arrayBase,halfCharCount, i, charCount, speed);
         canvasClear();
